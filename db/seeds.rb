@@ -13,14 +13,14 @@ user2 = User.create({
 
 survey1 = Survey.create({
     user: user1, 
-    titulo: "Pesquisa sobre Tecnologia",
+    title: "Pesquisa sobre Tecnologia",
     amt_questions: 2,
     status: "aberta"
 })
 
 survey2 = Survey.create({
     user: user2, 
-    titulo: "Pesquisa sobre Música",
+    title: "Pesquisa sobre Música",
     amt_questions: 3,
     status: "fechada"
 })
