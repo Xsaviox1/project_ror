@@ -31,4 +31,3 @@ module Mutations
       end
     end
   end
-  # cria uma pergunta no response, aponta apenas para a pergunta

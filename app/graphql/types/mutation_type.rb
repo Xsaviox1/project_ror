@@ -10,5 +10,9 @@ module Types
     field :create_survey, mutation: Mutations::CreateSurvey
 
     field :answer_question, mutation: Mutations::AnswerQuestion
+
+    field :delete_survey, mutation: Mutations::DeleteSurvey
+
+    field :edit_survey, mutation: Mutations::EditSurvey
   end
 end
