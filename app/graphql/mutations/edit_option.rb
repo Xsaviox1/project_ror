@@ -1,17 +1,15 @@
 module Mutations
-    class EditQuestion < Mutations::BaseMutation
+    class Mutations::EditOption < Mutations::BaseMutation
       argument :id, ID, required: true
       argument :content, String, required: false
-      argument :question_type, String, required: false
-      argument :amt_options, Integer, required: false
   
       field :question, Types::QuestionType, null: false
       field :errors, [String], null: false
   
-      def resolve(id:, content: nil, question_type: nil, amt_options: nil)
+      def resolve(id:, content: nil)
         question = Question.find(id)
   
-        if question.update(content: content, question_type: question_type, amt_options: amt_options)
+        if question.update(content: content)
           { question: question, errors: [] }
         else
           { question: nil, errors: question.errors.full_messages }

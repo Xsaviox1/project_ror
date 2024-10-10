@@ -14,5 +14,9 @@ module Types
     field :delete_survey, mutation: Mutations::DeleteSurvey
 
     field :edit_survey, mutation: Mutations::EditSurvey
+
+    field :edit_option, mutation: Mutations::EditOption 
+
+    field :delete_option, mutation: Mutations::DeleteOption
   end
 end

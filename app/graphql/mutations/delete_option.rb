@@ -1,19 +1,30 @@
 module Mutations
-    class DeleteQuestion < Mutations::BaseMutation
-      argument :id, ID, required: true
+    class Mutations::DeleteOption < Mutations::BaseMutation
   
-      field :question, Types::QuestionType, null: false
+      argument :id, ID, required: true
+      argument :title, String, required: false
+  
+      field :survey, Types::SurveyType, null: true
       field :errors, [String], null: false
   
       def resolve(id:)
-        question = Question.find(id)
-        if question.destroy
-          { question: question, errors: [] }
+        survey = Survey.find_by(id: id)
+        
+        if survey
+          survey.questions.each do |question|
+            if question.amt_options > 0
+              question.update(amt_options: question.amt_options - 1)
+            end
+          end
+          
+          if survey.destroy
+            { survey: survey, errors: [] }
+          else
+            { survey: nil, errors: survey.errors.full_messages }
+          end
         else
-          { question: nil, errors: question.errors.full_messages }
+          { survey: nil, errors: ["Survey not found"] }
         end
-      rescue ActiveRecord::RecordNotFound
-        { question: nil, errors: ["Question not found"] }
       end
     end
   end

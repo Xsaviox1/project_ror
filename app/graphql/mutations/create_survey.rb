@@ -61,9 +61,6 @@ module Mutations
             end
 
           when 'short'
-            if content.length > 100
-              raise GraphQL::ExecutionError, "Pergunta do tipo 'short' não pode exceder 100 caracteres."
-            end
 
             question = survey.questions.create!(
               content: content, 
