@@ -11,3 +11,6 @@ development:
   <<: *default
   database: survey
   
+test:
+  <<: *default
+  database: survey_test

@@ -7,7 +7,7 @@ class Login < BaseMutation
     field :token, String, null: false
     
         def resolve(name:, password:)
-            user = User.find_by(name: name)#se tiver nome igual, pitoca, fala que ja existe
+            user = User.find_by(name: name)
 
             if user&.authenticate(password)
                 token = JWT.encode({ user_id: user.id}, 'segredo', 'HS256')
