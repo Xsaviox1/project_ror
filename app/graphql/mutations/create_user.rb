@@ -15,9 +15,9 @@ module Mutations
           { user: user, errors: [] }
         else
           if user.errors.details[:name].any? { |error| error[:error] == :taken }
-            { user: nil, errors: ["O nome de usuário '#{name}' já existe."] }
+          raise GraphQL::ExecutionError, "The name '#{name}' already exists."
           else
-            { user: nil, errors: user.errors.full_messages }
+            raise GraphQL::ExecutionError, "The sent format is invalid."
           end
         end
       end

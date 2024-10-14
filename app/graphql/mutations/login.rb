@@ -13,7 +13,7 @@ class Login < BaseMutation
                 token = JWT.encode({ user_id: user.id}, 'segredo', 'HS256')
                 {token: token}
             else
-                raise GraphQL::ExecutionError, "Invalid email or password"
+                raise GraphQL::ExecutionError, "Invalid name or password"
             end
         end
 end

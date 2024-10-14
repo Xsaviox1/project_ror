@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_11_202435) do
   create_table "questions", force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.string "content"
-    t.string "question_type"
+    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "amt_options"
