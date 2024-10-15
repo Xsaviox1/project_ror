@@ -24,23 +24,18 @@ class GraphqlController < ApplicationController
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
+    return {} if variables_param.nil?
+  
     case variables_param
     when String
-      if variables_param.present?
-        JSON.parse(variables_param) || {}
-      else
-        {}
-      end
-    when Hash
-      variables_param
-    when ActionController::Parameters
-      variables_param.to_unsafe_hash # GraphQL-Ruby will validate name and type of incoming variables.
-    when nil
-      {}
+      variables_param.present? ? JSON.parse(variables_param) : {}
+    when Hash, ActionController::Parameters
+      variables_param.to_unsafe_hash
     else
-      raise ArgumentError, "Unexpected parameter: #{variables_param}"
+      raise ArgumentError, "Unexpected parameter: #{variables_param.inspect}"
     end
   end
+  
 
   def handle_error_in_development(e)
     logger.error e.message
@@ -50,11 +45,20 @@ class GraphqlController < ApplicationController
   end
 
   def current_user_from_token
-    token = request.headers['Autorization'].to_s.split(' ').last
-    return unless token
-
-    decoded_token = JWT.decode(token, 'segredo', true, algorithm:'HS256')
-    User.find(decoded_token[0]['user_id'])
-
+    token = request.headers['Authorization'].to_s.split(' ').last
+    logger.info "Authorization Token: #{token}"
+  
+    return unless token.present?
+  
+    begin
+      decoded_token = JWT.decode(token, 'segredo', true, algorithm: 'HS256')
+      logger.info "Decoded Token: #{decoded_token}"
+      User.find(decoded_token[0]['user_id'])
+    rescue JWT::DecodeError => e
+      logger.warn "JWT Decode Error: #{e.message}"
+      nil
+    end
   end
+  
+  
 end
