@@ -13,6 +13,11 @@ module Mutations
       user = context[:current_user]
       raise GraphQL::ExecutionError, "User not authenticated" unless user
 
+      unless user.role == 'player'
+        raise GraphQL::ExecutionError, "Only players are able to answer the questions"
+      end
+      
+
       question = Question.find_by(id: question_id)
       raise GraphQL::ExecutionError, "Question not found" unless question
 

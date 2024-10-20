@@ -13,4 +13,4 @@ development:
   
 test:
   <<: *default
-  database: survey_test
+  database: survey
