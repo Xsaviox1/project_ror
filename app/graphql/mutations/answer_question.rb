@@ -54,7 +54,7 @@ module Mutations
         raise GraphQL::ExecutionError, "Tipo de pergunta inválido: #{question.question_type}."
       end
 
-      response = question.responses.create!(content: content, user: user)
+      response = question.responses.create!(content: content)
 
       {
         response: response,
