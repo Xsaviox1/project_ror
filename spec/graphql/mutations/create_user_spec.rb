@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "mutation create_user" do
 
     before do
-        User.create!(name: "Sávio11", password: "password123", role: "admin")
-      end
+      User.create!(name: "Sávio110", password: "password123", role: "admin")
+    end
 
   it "creates the account" do
     query = <<~GQL
@@ -32,7 +32,7 @@ RSpec.describe "mutation create_user" do
     query = <<~GQL 
     mutation {
         createUser(input: {
-          name: "Sávio11"
+          name: "Sávio110"
           password: "password123"
           role: "admin"
         }) {
@@ -47,7 +47,7 @@ RSpec.describe "mutation create_user" do
     GQL
 
     result = SurveyGraphAppSchema.execute(query)
-    expect(result["errors"].first["message"]).to eq("The name 'Sávio11' already exists.")
+    expect(result["errors"].first["message"]).to eq("The name 'Sávio110' already exists.")
     
   end
 

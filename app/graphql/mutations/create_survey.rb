@@ -20,27 +20,30 @@ module Mutations
       user = context[:current_user]
       raise GraphQL::ExecutionError, "User not authenticated" unless user
 
+      unless user.role == 'admin'
+        raise GraphQL::ExecutionError, "Only admins are able to create surveys"
+      end
+
       ActiveRecord::Base.transaction do
         survey = user.surveys.create!(title: title, amt_questions: amt_questions)
         created_questions = []
 
         contents.each_with_index do |content, index|
           question_type = question_types[index]
-          raise GraphQL::ExecutionError, "Máximo de #{MAX_QUESTIONS} perguntas por pesquisa." if created_questions.size >= MAX_QUESTIONS
+          raise GraphQL::ExecutionError, "maximum of #{MAX_QUESTIONS} questions per survey." if created_questions.size >= MAX_QUESTIONS
 
           question_options = options[index] || []
 
-          # Verificação de tipo de pergunta e opções
           if question_type == 'multiple' || question_type == 'unique'
             if question_options.uniq.size > MAX_OPTIONS
-              raise GraphQL::ExecutionError, "Máximo de #{MAX_OPTIONS} opções por pergunta."
+              raise GraphQL::ExecutionError, "maximum of #{MAX_OPTIONS} options per question."
             end
           elsif question_type == 'short' || question_type == 'long'
             if question_options.uniq.size > 1
-              raise GraphQL::ExecutionError, "Apenas uma opção permitida."
+              raise GraphQL::ExecutionError, "Only one option is accept."
             end
           else
-            raise GraphQL::ExecutionError, "Tipo de pergunta inválido: #{question_type}."
+            raise GraphQL::ExecutionError, "Question type is invalid: #{question_type}."
           end
 
           question = survey.questions.create!(content: content, question_type: question_type, amt_options: question_options.size)

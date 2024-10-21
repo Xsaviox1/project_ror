@@ -7,6 +7,13 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(id:, content: nil)
+
+      user = context[:current_user]
+      raise GraphQL::ExecutionError, "User not authenticated" unless user
+
+      unless user.role == 'admin'
+        raise GraphQL::ExecutionError, "Only admins are able to edit options"
+      end
       option = Option.find(id) # Corrigir para buscar uma Option, não uma Question
 
       if option.update(content: content)

@@ -6,17 +6,25 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(id:)
+      
+      user = context[:current_user]
+      raise GraphQL::ExecutionError, "User not authenticated" unless user
+
+      unless user.role == 'admin'
+        raise GraphQL::ExecutionError, "Only players are able to answer the questions"
+      end
+
       option = Option.find_by(id: id)
 
       if option
-        # Adjust the amt_options of the related question
+        
         question = option.question
 
         if question.amt_options > 0
           question.update(amt_options: question.amt_options - 1)
         end
 
-        # Attempt to destroy the option
+        
         if option.destroy
           { option: option, errors: [] }
         else

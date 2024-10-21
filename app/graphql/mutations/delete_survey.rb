@@ -8,6 +8,14 @@ module Mutations
     field :errors, [String], null: false
 
         def resolve(id:)
+
+            user = context[:current_user]
+            raise GraphQL::ExecutionError, "User not authenticated" unless user
+
+            unless user.role == 'admin'
+                raise GraphQL::ExecutionError, "Only admins are able to delete surveys"
+            end
+
             survey = Survey.find_by(id: id)
         
           if survey

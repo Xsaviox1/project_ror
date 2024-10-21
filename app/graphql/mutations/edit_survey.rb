@@ -9,6 +9,13 @@ module Mutations
       field :errors, [String], null: false
   
       def resolve(id:, title: nil, status: nil)
+
+      user = context[:current_user]
+      raise GraphQL::ExecutionError, "User not authenticated" unless user
+
+      unless user.role == 'admin'
+        raise GraphQL::ExecutionError, "Only admins are able to edit surveys"
+      end
         
         survey = Survey.find(id)
   

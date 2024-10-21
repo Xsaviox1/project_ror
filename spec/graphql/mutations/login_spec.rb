@@ -3,14 +3,14 @@ require "rails_helper"
 RSpec.describe "mutation login" do
 
   before do
-    User.create!(name: "Sávio11", password: "password123", role: "admin")
+    User.create!(name: "Sávio110", password: "password123", role: "admin")
   end
 
   it "authenticates the account and returns a token" do
     query = <<~GQL
     mutation {
       login(input: {
-        name: "Sávio11",
+        name: "Sávio110",
         password: "password123"
       }) {
         token
