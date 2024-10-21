@@ -29,9 +29,8 @@ RSpec.describe "mutation edit_survey", type: :request do
 
         json_response = JSON.parse(response.body)
 
-        expect(json_response['errors']).to be_nil
-        expect(json_response['data']['editSurvey']['survey']['title']).to eq("New Title")
-        expect(json_response['data']['editSurvey']['survey']['status']).to eq("inactive")
+        expect(json_response['errors']).not_to be_nil
+        expect(json_response['errors'][0]['message']).to eq("Only admins are able to edit surveys")
     end
 
     it "allows admin to edit the survey" do
@@ -58,7 +57,8 @@ RSpec.describe "mutation edit_survey", type: :request do
 
         json_response = JSON.parse(response.body)
 
-        expect(json_response['errors']).not_to be_nil
-        expect(json_response['errors'][0]['message']).to eq("Only players are able to answer the questions")
+        expect(json_response['errors']).to be_nil
+        expect(json_response['data']['editSurvey']['survey']['title']).to eq("New Title")
+        expect(json_response['data']['editSurvey']['survey']['status']).to eq("inactive")
     end
 end

@@ -32,6 +32,8 @@ RSpec.describe "mutation answer_question", type: :request do
 
     post '/graphql', headers: { 'Authorization': "Bearer #{token}" }, params: { query: mutation_query }
 
+    json_response = JSON.parse(response.body)
+
     expect(json_response['errors']).to be_nil
     
   end
