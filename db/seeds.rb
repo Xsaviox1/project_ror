@@ -1,6 +1,7 @@
 # db/seeds.rb
 
 # Clear the old database
+Response.destroy_all
 Option.destroy_all
 Question.destroy_all
 Survey.destroy_all
